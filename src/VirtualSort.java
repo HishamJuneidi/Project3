@@ -59,14 +59,17 @@ public class VirtualSort {
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException {
-		System.out.println("Hello, World");
-		generateFile("sample1", "4096", 'a');
-		
 		int offset = 0;
 		int blockSize = 1024;
 		int len = Integer.parseInt(args[1]);
+		
+		System.out.println("Hello, World");
+		//generateFile(args[0], "" + (4096 * len), 'a');
+		
+		
+		
 		BufferPool bp = new BufferPool(len * blockSize);
-		bp.setFile("input.txt");
+		bp.setFile(args[0]);
 		bp.read(len, offset);
 		bp.sort();
 		bp.write(len, offset);
