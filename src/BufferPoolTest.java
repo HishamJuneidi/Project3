@@ -46,7 +46,7 @@ public class BufferPoolTest extends TestCase {
 		bp1.insert(r1);
 		bp2.insert(r2);
 		bp2.insert(r1);
-		bp10.insert(r8);
+		bp10.insert(r8); 
 		bp10.insert(r1);
 		bp10.insert(r5);
 		bp10.insert(r7);

@@ -60,7 +60,7 @@ public class VirtualSort {
 	 */
 	public static void main(String[] args) throws IOException {
 		int offset = 0;
-		int blockSize = 1024;
+		int blockSize = 1024;// Records 
 		int len = Integer.parseInt(args[1]);
 		
 		System.out.println("Hello, World");
@@ -69,7 +69,7 @@ public class VirtualSort {
 		
 		
 		BufferPool bp = new BufferPool(len * blockSize);
-		bp.setFile(args[0]);
+		bp.setFile(args[0]); 
 		bp.read(len, offset);
 		bp.sort();
 		bp.write(len, offset);

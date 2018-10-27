@@ -49,7 +49,7 @@ public class CheckFile
                 in.readShort();
                 if (key1 > key2)
                 {
-                    isError = true;
+                    isError = true; 
                 }
             }
         }

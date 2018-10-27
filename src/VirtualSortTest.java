@@ -6,7 +6,7 @@ import student.TestCase;
  */
 
 public class VirtualSortTest
-    extends TestCase {
+    extends TestCase { 
     private CheckFile fileChecker;
 
     /**
@@ -37,15 +37,15 @@ public class VirtualSortTest
         throws Exception
     {
         String[] args = new String[3];
-        args[0] = "input.txt";
-        args[1] = "4";
+        args[0] = "input.txt"; //name of file
+        args[1] = "4"; //number of buffers
         args[2] = "statFileA.txt";
 
-        VirtualSort.generateFile("input.txt", "10", 'a');
+        VirtualSort.generateFile("input.txt", "2", 'a'); //each block 4096 bytes in the file
         VirtualSort.generateFile("input2.txt", "10", 'b');
         VirtualSort.main(args);
-        assertFalse(fileChecker.checkFile("input.txt"));
-        assertFalse(fileChecker.checkFile("input2.txt"));
+        assertTrue(fileChecker.checkFile("input.txt"));
+        //assertFalse(fileChecker.checkFile("input2.txt"));
     }
 
 }
