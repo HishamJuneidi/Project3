@@ -26,9 +26,9 @@ public class MyQueue {
 	}
 	
 	public void add(myBlock mb) {
-		this.current = new myNode(mb, head, head.next());
-		this.head.setNext(current);
-		this.current.next().setPrevious(current);
+		this.current = new myNode(mb, head.next(), head);
+		this.head.setNext(this.current);
+		this.current.next().setPrevious(this.current);
 		numNodes++;
 	}
 	
@@ -37,10 +37,10 @@ public class MyQueue {
 			return null;
 		}
 		this.current = this.tail.previous();
-		myBlock output = current.block();
-		current.previous().setNext(tail);
-		tail.setPrevious(current.previous());
-		current = head.next();
+		myBlock output = this.current.block();
+		this.current.previous().setNext(this.tail);
+		this.tail.setPrevious(this.current.previous());
+		this.current = this.head.next();
 		this.numNodes--;
 		return output;
 	}

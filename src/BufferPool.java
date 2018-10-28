@@ -9,18 +9,9 @@ public class BufferPool {
 	private static final int BLOCK_SIZE = 4096;
 	private static final int RECORD_SIZE = 4;
 	private long endTime;
-	/**
-	 * 
-	 */
-	public int cacheHits = 0;
-	/**
-	 * 
-	 */
-	public int reads = 0;
-	/**
-	 * 
-	 */
-	public int writes = 0;
+	private int cacheHits = 0;
+	private int reads = 0;
+	private int writes = 0;
 	
 	public BufferPool(RandomAccessFile f, int numBuffers) throws IOException {
 		long startTime = System.currentTimeMillis();

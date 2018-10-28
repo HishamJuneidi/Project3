@@ -13,30 +13,28 @@ public class QuickSort {
 		this.quicksort(0, (fileSize/ RECORD_SIZE) - 1);
 	}
 	
-	private void quicksort(int low, int high) throws IOException {
-		if (low < high) {
-			int index1 = low;
-			int index2 = high;
-			short val = bp.key(low);
-			int count = low;
-			while (count <= index2) {
-				if (bp.key(count) < val) {
-					this.swap(index1, count);
-					index1++;
-					count++;
-				}
-				else if (bp.key(count) > val) {
-					this.swap(count, index2);
-					index2--;
-				}
-				else {
-					count++;
-				}
-			}
-			this.quicksort(low, index1 - 1);
-			this.quicksort(index2 + 1, high);
+	private void quicksort(int index1, int index2) throws IOException {
+		if (index1 < index2) {
+	        int temp1 = index1;
+	        int temp2 = index2;
+	        short val = bp.key(index1);
+	        int count = index1;
+	        while (count <= temp2) {
+	            if (bp.key(count) < val) {
+	                swap(temp1++, count++);
+	            }
+	            else if (bp.key(count) > val) {
+	                swap(count, temp2--);
+	            }
+	            else {
+	                count++;
+	            }
+	        }
+	        quicksort(index1, temp1 - 1);
+	        quicksort(temp2 + 1, index2);
 		}
 	}
+	
 	
 	
 	

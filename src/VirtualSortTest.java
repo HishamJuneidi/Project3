@@ -38,14 +38,14 @@ public class VirtualSortTest
     {
         String[] args = new String[3];
         args[0] = "input.txt"; //name of file
-        args[1] = "4"; //number of buffers
+        args[1] = "1"; //number of buffers
         args[2] = "statFileA.txt";
 
         VirtualSort.generateFile("input.txt", "2", 'a'); //each block 4096 bytes in the file
         VirtualSort.generateFile("input2.txt", "10", 'b');
         VirtualSort.main(args);
         assertTrue(fileChecker.checkFile("input.txt"));
-        //assertFalse(fileChecker.checkFile("input2.txt"));
+        assertFalse(fileChecker.checkFile("input2.txt"));
     }
 
 }
