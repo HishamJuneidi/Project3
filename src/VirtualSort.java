@@ -1,3 +1,4 @@
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -61,7 +62,7 @@ public class VirtualSort {
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException {
-		if (args == null || args.length < 3) {
+		if (args == null || args.length < 2) {
 			System.out.println("Not enough arguments!");
 		}
 		else {
@@ -71,21 +72,31 @@ public class VirtualSort {
 				fileToSort = new RandomAccessFile(args[0], "rw");
 			}
 			catch (Exception e) {
-				
+				e.printStackTrace();
 			}
 			
 			if (fileToSort != null) {
-				FileWriter stats = new FileWriter(args[2], true);
+				
 				BufferPool bp = new BufferPool(fileToSort, numBlocks);
 				bp.closeFile();
-				
-				stats.write("File Sorted: " + args[0] + "\n");
-				stats.write("Cache Hits: " + bp.hits() + "\n");
-				stats.write("File reads: " + bp.reads() + "\n");
-				stats.write("File writes: " + bp.writes() + "\n");
-				stats.write("Time taken: " + bp.time() + "\n");
-				stats.flush();
-				stats.close();
+				if (args.length == 3) {
+					File file = new File(args[2]);
+					FileWriter stats;
+					if (file.exists()) {
+						stats = new FileWriter(file, true);
+					}
+					else {
+						file.createNewFile();
+						stats = new FileWriter(file);
+					}
+					stats.write("File Sorted: " + args[0] + "\n");
+					stats.write("Cache Hits: " + bp.hits() + "\n");
+					stats.write("File reads: " + bp.reads() + "\n");
+					stats.write("File writes: " + bp.writes() + "\n");
+					stats.write("Time taken: " + bp.time() + "\n");
+					stats.flush();
+					stats.close();
+				}
 			}
 			else {
 				System.out.println("File with name " + args[0] + " has not been created yet");
