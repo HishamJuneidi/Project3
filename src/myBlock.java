@@ -25,6 +25,10 @@ public class myBlock {
 		return this.pool;
 	}
 	
+	public void setPool(byte[] p) {
+		this.pool = p;
+	}
+	
 	public boolean dirtyBit() {
 		return this.dirtyBit;
 	}

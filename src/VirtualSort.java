@@ -1,4 +1,6 @@
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 
 /**
  * { your description of the project here }
@@ -59,19 +61,36 @@ public class VirtualSort {
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException {
-		int offset = 0;
-		int blockSize = 1024;// Records 
-		int len = Integer.parseInt(args[1]);
+		if (args == null || args.length < 3) {
+			System.out.println("Not enough arguments!");
+		}
+		else {
+			int numBlocks = Integer.parseInt(args[1]);
+			RandomAccessFile fileToSort = null;
+			try {
+				fileToSort = new RandomAccessFile(args[0], "rw");
+			}
+			catch (Exception e) {
+				
+			}
+			
+			if (fileToSort != null) {
+				FileWriter stats = new FileWriter(args[2], true);
+				BufferPool bp = new BufferPool(fileToSort, numBlocks);
+				bp.closeFile();
+				
+				stats.write("File Sorted: " + args[0] + "\n");
+				stats.write("Cache Hits: " + bp.hits() + "\n");
+				stats.write("File reads: " + bp.reads() + "\n");
+				stats.write("File writes: " + bp.writes() + "\n");
+				stats.write("Time taken: " + bp.time() + "\n");
+				stats.flush();
+				stats.close();
+			}
+			else {
+				System.out.println("File with name " + args[0] + " has not been created yet");
+			}
+		}
 		
-		System.out.println("Hello, World");
-		//generateFile(args[0], "" + (4096 * len), 'a');
-		
-		
-		
-		BufferPool bp = new BufferPool(len * blockSize);
-		bp.setFile(args[0]); 
-		bp.read(len, offset);
-		bp.sort();
-		bp.write(len, offset);
 	}
 }
