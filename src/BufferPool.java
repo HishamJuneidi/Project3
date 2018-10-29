@@ -14,19 +14,16 @@ public class BufferPool {
 	private int writes = 0;
 	
 	public BufferPool(RandomAccessFile f, int numBuffers) throws IOException {
-		long startTime = System.currentTimeMillis();
 		this.file = f;
-		int fileSize = (int) file.length();
 		this.lruCache = new MyQueue(numBuffers);
-		for (int i = 0; i < numBuffers; i++) {
+		int i;
+		for (i = 0; i < numBuffers; i++) {
 			this.lruCache.add(new myBlock(null, -1));
 		}
-		new QuickSort(this, fileSize);
-		this.writeAtEnd();
-		this.endTime = System.currentTimeMillis() - startTime;
+		
 	}
 	
-	public void remove() throws IOException {
+	public myBlock remove() throws IOException {
 		myBlock block = this.lruCache.remove();
 		if (block != null && block.dirtyBit()) {
 			this.file.seek(block.index() * BLOCK_SIZE);
@@ -35,21 +32,25 @@ public class BufferPool {
 			this.writes++;
 			this.file.seek(0);
 		}
+		return block;
 	}
 	
 	public myBlock getBlock(int index) throws IOException {
 		int offset = (index * RECORD_SIZE) / BLOCK_SIZE;
 		myBlock output = this.lruCache.search(offset);
 		if (output == null) {
-			byte[] newBuffer = new byte[BLOCK_SIZE];
-			this.file.seek(BLOCK_SIZE * offset);
-			this.file.read(newBuffer, 0, BLOCK_SIZE);
-			this.file.seek(0);
-			output = new myBlock(newBuffer, offset);
-			this.lruCache.add(output);
-			if (lruCache.size() > lruCache.capacity()) {
-				this.remove();
+			if (lruCache.size() == lruCache.capacity()) {
+				output = this.remove();
+				output.setIndex(offset);
+				output.setDirtyBit(false);
 			}
+			else {
+				output = new myBlock(null, offset);
+			}
+			this.file.seek(BLOCK_SIZE * offset);
+			this.file.read(output.pool(), 0, BLOCK_SIZE);
+			this.file.seek(0);
+			this.lruCache.add(output);
 			this.reads += 1;
 			this.cacheFlag = false;
 			return output;
@@ -74,7 +75,8 @@ public class BufferPool {
 		myBlock output = this.getBlock(index);
 		int bIndex = (index * RECORD_SIZE) % BLOCK_SIZE;
 		byte[] temp = output.pool();
-		for (int i = 0; i < size; i++) {
+		int i;
+		for (i = 0; i < size; i++) {
 			temp[bIndex] = bytes[i];
 			bIndex++;
 		}
@@ -82,14 +84,17 @@ public class BufferPool {
 		output.setDirtyBit(true);
 	}
 	
-	public void getBytes(byte[] bytes, int size, int index) throws IOException {
+	public byte[] getBytes(int index) throws IOException {
 		myBlock output = this.getBlock(index);
+		byte[] bytes = new byte[RECORD_SIZE];
 		int bIndex = (index * RECORD_SIZE) % BLOCK_SIZE;
 		byte[] temp = output.pool();
-		for (int i = 0; i < size; i++) {
+		int i;
+		for (i = 0; i < RECORD_SIZE; i++) {
 			bytes[i] = temp[bIndex];
 			bIndex++;
 		}
+		return bytes;
 	}
 	
 	/**

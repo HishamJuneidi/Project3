@@ -76,8 +76,12 @@ public class VirtualSort {
 			}
 			
 			if (fileToSort != null) {
-				
+				long startTime = System.currentTimeMillis();
 				BufferPool bp = new BufferPool(fileToSort, numBlocks);
+				int fileSize = (int) fileToSort.length();
+				new QuickSort(bp, fileSize);
+				bp.writeAtEnd();
+				long endTime = (System.currentTimeMillis() - startTime);
 				bp.closeFile();
 				if (args.length == 3) {
 					File file = new File(args[2]);
@@ -93,7 +97,7 @@ public class VirtualSort {
 					stats.write("Cache Hits: " + bp.hits() + "\n");
 					stats.write("File reads: " + bp.reads() + "\n");
 					stats.write("File writes: " + bp.writes() + "\n");
-					stats.write("Time taken: " + bp.time() + "\n");
+					stats.write("Time taken: " + endTime + "\n");
 					stats.flush();
 					stats.close();
 				}

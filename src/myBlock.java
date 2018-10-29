@@ -4,10 +4,14 @@ public class myBlock {
 	private byte[] pool;
 	private boolean dirtyBit;
 	private int index;
+	private static final int BLOCK_SIZE = 4096;
 	
 	public myBlock(byte[] p, int i) {
 		if (p != null) {
 			this.pool = p;
+		}
+		else {
+			this.pool = new byte[BLOCK_SIZE];
 		}
 		this.index = i;
 		this.dirtyBit = false;
