@@ -31,7 +31,7 @@ public class QuickSort {
         if (low < high) {
             int i;
             int j;
-            if (high - low <= 50) {
+            if (high - low <= 10) {
                 for (i = low + 1; i <= high; i++) {
                     for (j = i; (j > low) && bp.key(j - 1) > bp.key(j); j--) {
                         swap(j, j - 1);

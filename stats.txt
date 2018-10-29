@@ -1,5 +1,0 @@
-File Sorted: input3.txt
-Cache Hits: 0
-File reads: 0
-File writes: 0
-Time taken: 2
