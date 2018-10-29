@@ -31,8 +31,8 @@ import java.io.RandomAccessFile;
 /**
  * The class containing the main method, the entry point of the application.
  * 
- * @author { your name here }
- * @version { put something here }
+ * @author risha97, hishamj6
+ * @version 10/29/2018
  */
 public class VirtualSort {
     
@@ -55,57 +55,60 @@ public class VirtualSort {
         generator.generateFile(inputs);
     }
 
-	/** 
-	 * The entry point of the application
-	 * 
-	 * @param args
-	 * @throws IOException 
-	 */
-	public static void main(String[] args) throws IOException {
-		if (args == null || args.length < 2) {
-			System.out.println("Not enough arguments!");
-		}
-		else {
-			int numBlocks = Integer.parseInt(args[1]);
-			RandomAccessFile fileToSort = null;
-			try {
-				fileToSort = new RandomAccessFile(args[0], "rw");
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-			if (fileToSort != null) {
-				long startTime = System.currentTimeMillis();
-				BufferPool bp = new BufferPool(fileToSort, numBlocks);
-				int fileSize = (int) fileToSort.length();
-				new QuickSort(bp, fileSize);
-				bp.writeAtEnd();
-				long endTime = (System.currentTimeMillis() - startTime);
-				bp.closeFile();
-				if (args.length == 3) {
-					File file = new File(args[2]);
-					FileWriter stats;
-					if (file.exists()) {
-						stats = new FileWriter(file, true);
-					}
-					else {
-						file.createNewFile();
-						stats = new FileWriter(file);
-					}
-					stats.write("File Sorted: " + args[0] + "\n");
-					stats.write("Cache Hits: " + bp.hits() + "\n");
-					stats.write("File reads: " + bp.reads() + "\n");
-					stats.write("File writes: " + bp.writes() + "\n");
-					stats.write("Time taken: " + endTime + "\n");
-					stats.flush();
-					stats.close();
-				}
-			}
-			else {
-				System.out.println("File with name " + args[0] + " has not been created yet");
-			}
-		}
-		
-	}
+    /** 
+     * The entry point of the application
+     * 
+     * @param args parameters of program
+     * file being sorted, number of buffers,
+     * and the file containing statistics
+     * @throws IOException 
+     */
+    public static void main(String[] args) throws IOException {
+        if (args == null || args.length < 2) {
+            System.out.println("Not enough arguments!");
+        }
+        else {
+            int numBlocks = Integer.parseInt(args[1]);
+            RandomAccessFile fileToSort = null;
+            try {
+                fileToSort = new RandomAccessFile(args[0], "rw");
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+            
+            if (fileToSort != null) {
+                long startTime = System.currentTimeMillis();
+                BufferPool bp = new BufferPool(fileToSort, numBlocks);
+                int fileSize = (int) fileToSort.length();
+                new QuickSort(bp, fileSize);
+                bp.writeAtEnd();
+                long endTime = (System.currentTimeMillis() - startTime);
+                bp.closeFile();
+                if (args.length == 3) {
+                    File file = new File(args[2]);
+                    FileWriter stats;
+                    if (file.exists()) {
+                        stats = new FileWriter(file, true);
+                    }
+                    else {
+                        file.createNewFile();
+                        stats = new FileWriter(file);
+                    }
+                    stats.write("File Sorted: " + args[0] + "\n");
+                    stats.write("Cache Hits: " + bp.hits() + "\n");
+                    stats.write("File reads: " + bp.reads() + "\n");
+                    stats.write("File writes: " + bp.writes() + "\n");
+                    stats.write("Time taken: " + endTime + "\n");
+                    stats.flush();
+                    stats.close();
+                }
+            }
+            else {
+                System.out.println("File with name " + args[0] + 
+                        " has not been created yet");
+            }
+        }
+        
+    }
 }

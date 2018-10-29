@@ -40,12 +40,17 @@ public class VirtualSortTest
         args[0] = "input.txt"; //name of file
         args[1] = "10"; //number of buffers
         args[2] = "statFileA.txt";
-
-        VirtualSort.generateFile("input.txt", "1000", 'a'); //each block 4096 bytes in the file
-        //VirtualSort.generateFile("input2.txt", "10", 'b');
+        //each block 4096 bytes in the file
+        VirtualSort.generateFile("input.txt", "100", 'a'); 
+        VirtualSort.generateFile("input2.txt", "10", 'b');
+        VirtualSort.main(new String[] {"", "1", "stats.txt"});
         VirtualSort.main(args);
+        args[0] = "input2.txt";
+        VirtualSort.main(args);
+        VirtualSort.main(null);
+        VirtualSort.main(new String[] {"input.txt"});
         assertTrue(fileChecker.checkFile("input.txt"));
-        //assertFalse(fileChecker.checkFile("input2.txt"));
+        assertTrue(fileChecker.checkFile("input2.txt"));
     }
 
 }
