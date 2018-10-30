@@ -1,3 +1,5 @@
+import java.io.File;
+
 import student.TestCase;
 
 /**
@@ -43,15 +45,26 @@ public class VirtualSortTest
         //each block 4096 bytes in the file
         VirtualSort.generateFile("input.txt", "1000", 'a'); 
         VirtualSort.generateFile("input2.txt", "10", 'b');
+        VirtualSort.generateFile("input3.txt", "10", 'a');
         VirtualSort.main(new String[] {"", "1", "stats.txt"});
+        VirtualSort.main(new String[] {"input3.txt", "1"});
         VirtualSort.main(args);
+        assertFalse(fileChecker.checkFile("input2.txt"));
         args[0] = "input2.txt";
-        args[2] = "stateFileB.txt";
+        args[2] = "statFileB.txt";
         VirtualSort.main(args);
         VirtualSort.main(null);
         assertTrue(fileChecker.checkFile("input.txt"));
         assertTrue(fileChecker.checkFile("input2.txt"));
         VirtualSort.main(new String[] {"input.txt"});
+        File f = new File("statFileB.txt");
+        File f2 = new File("input.txt");
+        File f3 = new File("input2.txt");
+        File f4 = new File("input3.txt");
+        f.delete();
+        f2.delete();
+        f3.delete();
+        f4.delete();
     }
 
 }

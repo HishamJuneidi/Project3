@@ -60,11 +60,4 @@ public class MyNode {
         return this.b;
     }
     
-    /**
-     * sets data being stored
-     * @param mb new value of data
-     */
-    public void setBlock(MyBlock mb) {
-        this.b = mb;
-    }
 }

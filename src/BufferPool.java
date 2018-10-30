@@ -60,14 +60,9 @@ public class BufferPool {
         int offset = (index * RECORD_SIZE) / BLOCK_SIZE;
         MyBlock output = this.lruCache.search(offset);
         if (output == null) {
-            if (lruCache.size() == lruCache.capacity()) {
-                output = this.remove();
-                output.setIndex(offset);
-                output.setDirtyBit(false);
-            }
-            else {
-                output = new MyBlock(null, offset);
-            }
+            output = this.remove();
+            output.setIndex(offset);
+            output.setDirtyBit(false);
             this.file.seek(BLOCK_SIZE * offset);
             this.file.read(output.pool(), 0, BLOCK_SIZE);
             this.file.seek(0);
